@@ -14,6 +14,15 @@ services:
       - "5432:5432"
     volumes:
       - postgresDB_data:/var/lib/postgresql/data
+    
+  auth:
+    image: plotlinebilling/auth-service
+    env_file:
+      - ./.env
+    environment:
+      - PORT=4001
+    ports:
+      - "4001:4001"
 
 volumes:
   postgresDB_data:
