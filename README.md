@@ -6,7 +6,7 @@
 2. Commerce Microservice
 3. Orders and Billings Microservice
 
-## Backend Documentation For the Amigos :cowboy_hat_face:: 
+## Backend Documentation For the Amigos :cowboy_hat_face:: https://documenter.getpostman.com/view/14038453/2s9Y5TzQF4
 
 ## Deployed Link : 
 
@@ -22,11 +22,11 @@
 
 ## Tasks
 #### Pre Requirements
-- [ ] Start a Postgress Container using Docker Compose
+- [X] Start a Postgress Container using Docker Compose
 
-- [ ] Design Database Table for Authentication
+- [X] Design Database Table for Authentication
 
-- [ ] Create Authentication Functionality Endpoint (Register, Login, Update, Get, Delete User)
+- [X] Create Authentication Functionality Endpoint (Register, Login, Update, Get, Delete User)
 
 - [ ] Design Database Table for Products & Services
 
@@ -52,15 +52,15 @@
 
 #### Authentication Endpoints
 
-- [ ] Register User
+- [X] Register User
 
-- [ ] Login User
+- [X] Login User
 
-- [ ] Update User
+- [X] Update User
 
-- [ ] Get User Data
+- [X] Get User Data
 
-- [ ] Delete User
+- [X] Delete User
 
 
 
