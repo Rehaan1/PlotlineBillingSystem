@@ -564,7 +564,7 @@ router.get('/',tokenCheck, (req, res) => {
                 .then(() => {
                     
                     const query = format(
-                        "SELECT * FROM items WHERE item_id = %L RETURNING *",
+                        "SELECT * FROM items WHERE item_id = %L",
                         itemId
                     )
 
