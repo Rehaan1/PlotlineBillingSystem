@@ -11,7 +11,7 @@ const port = process.env.PORT || 3001
 
 app.get('/', (req, res) => {
   res.status(200).json({
-    data: 'Namaste! Welcome to Auth Microservice'
+    data: 'Namaste! Welcome to Commerce Microservice'
   })
 })
 
