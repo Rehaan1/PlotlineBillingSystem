@@ -548,4 +548,69 @@ router.patch('/update', tokenCheck, authorizeAdmin, (req,res) => {
 })
 
 
+router.get('/',tokenCheck, (req, res) => {
+
+    if (!req.body.itemId) {
+        return res.status(400).json({
+            message: "Missing Required Body Content"
+        })
+    }
+
+    const itemId = req.body.itemId
+
+    dbUserPool.connect()
+        .then(client => {
+            client.query("BEGIN")
+                .then(() => {
+                    
+                    const query = format(
+                        "SELECT * FROM items WHERE item_id = %L RETURNING *",
+                        itemId
+                    )
+
+                    client.query(query)
+                        .then(result => {
+                            client.query("COMMIT")
+                            client.release()
+                            if (result.rowCount === 0) {
+                                
+                                return res.status(404).json({
+                                    message: "Item Not Found or User Unauthorized"
+                                })
+                            }
+
+                            return res.status(200).json({
+                                message: "Item Fetched Successfully",
+                                data: result.rows[0] 
+                            })
+                        })
+                        .catch(err => {
+                            client.query("ROLLBACK")
+                            client.release()
+                            console.log("Error: ", err)
+                            return res.status(500).json({
+                                message: "Query error",
+                                error: err
+                            })
+                        })
+                })
+                .catch(err => {
+                    console.log("Error: ", err)
+                    client.release()
+                    return res.status(500).json({
+                        message: "Database transaction error",
+                        error: err
+                    })
+                })
+        })
+        .catch(err => {
+            console.log(err)
+            return res.status(200).json({
+                message: "Database Connection Error",
+                error: err
+            })
+        })
+})
+
+
 module.exports = router

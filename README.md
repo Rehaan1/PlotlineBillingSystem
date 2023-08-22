@@ -66,7 +66,7 @@
 
 ##### Items
 
-- [ ] Add new Product/Service (Admin Only)
+- [X] Add new Product/Service (Admin Only)
 
 - [ ] Show all Products
 
@@ -74,9 +74,9 @@
 
 - [ ] Get Product/Service
 
-- [ ] Update Product/Service (Admin Only)
+- [X] Update Product/Service (Admin Only)
 
-- [ ] Delete Product/Service (Admin Only)
+- [X] Delete Product/Service (Admin Only)
 
 
 
