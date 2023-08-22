@@ -638,7 +638,7 @@ router.get('/products',tokenCheck, (req, res) => {
 
                     let query = ""
 
-                    if(lastTimeStamp === -1)
+                    if(lastTimeStamp === "-1")
                     {
                         query = format(
                             "SELECT * FROM items ORDER BY timestamp_column DESC LIMIT 10"
