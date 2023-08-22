@@ -20,8 +20,10 @@ const tokenCheck = (req, res, next) => {
         return res.status(401).json({ message: 'failed authentication' })
       } else {
         const userId = decodedToken.userId
+        const role = decodedToken.role
 
         req.userId = userId
+        req.user.role = role
         next()
       }
     })
