@@ -34,6 +34,7 @@ psql -h $HOST -p $PORT -U $USERNAME -d $DB_NAME -c "CREATE TABLE IF NOT EXISTS i
     price NUMERIC(10,2), 
     quantity INTEGER, 
     item_type VARCHAR(20) CHECK (item_type IN ('product', 'service')),
+    timestamp_column TIMESTAMP DEFAULT current_timestamp,
     PRIMARY KEY (item_id, item_type), 
     CONSTRAINT unique_item_id_type UNIQUE (item_id, item_type) 
 )  PARTITION BY LIST (item_type);"

@@ -613,4 +613,83 @@ router.get('/',tokenCheck, (req, res) => {
 })
 
 
+router.get('/products',tokenCheck, (req, res) => {
+
+    // Here timestamp is being used for pagination purposes
+    // as Normal Pagination and Offset causes high latency as it 
+    // gets all the pages and then excludes the offset pages.
+    //
+    // Querying by timestamp and whereas much more efficient
+    // as we no longer include the unecessary records
+
+    if (!req.body.lastTimeStamp) {
+        return res.status(400).json({
+            message: "Missing Required Body Content"
+        })
+    }
+
+    // lastTimeStamp = -1 if first query
+    const lastTimeStamp = req.body.lastTimeStamp
+
+    dbUserPool.connect()
+        .then(client => {
+            client.query("BEGIN")
+                .then(() => {
+
+                    let query = ""
+
+                    if(lastTimeStamp === -1)
+                    {
+                        query = format(
+                            "SELECT * FROM items ORDER BY timestamp_column DESC LIMIT 10"
+                        )
+                    }
+                    else
+                    {
+                        query = format(
+                            "SELECT * FROM items WHERE timestamp_column < %L ORDER BY timestamp_column DESC LIMIT 10",
+                            lastTimeStamp
+                        )
+                    }
+                    
+
+                    client.query(query)
+                        .then(result => {
+                            client.query("COMMIT")
+                            client.release()
+
+                            return res.status(200).json({
+                                message: "products Fetched Successfully",
+                                data: result.rows
+                            })
+                        })
+                        .catch(err => {
+                            client.query("ROLLBACK")
+                            client.release()
+                            console.log("Error: ", err)
+                            return res.status(500).json({
+                                message: "Query error",
+                                error: err
+                            })
+                        })
+                })
+                .catch(err => {
+                    console.log("Error: ", err)
+                    client.release()
+                    return res.status(500).json({
+                        message: "Database transaction error",
+                        error: err
+                    })
+                })
+        })
+        .catch(err => {
+            console.log(err)
+            return res.status(200).json({
+                message: "Database Connection Error",
+                error: err
+            })
+        })
+})
+
+
 module.exports = router
