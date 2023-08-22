@@ -56,7 +56,7 @@ psql -h $HOST -p $PORT -U $USERNAME -d $DB_NAME -c "CREATE TABLE product_tax (
     PA NUMERIC(10, 2),
     PB NUMERIC(10, 2),
     PC NUMERIC(10, 2) DEFAULT 200,
-    FOREIGN KEY (item_id, item_type) REFERENCES items(item_id, item_type),
+    FOREIGN KEY (item_id, item_type) REFERENCES items(item_id, item_type) ON DELETE CASCADE,
     PRIMARY KEY (product_tax_id)
 );"
 
@@ -71,7 +71,7 @@ psql -h $HOST -p $PORT -U $USERNAME -d $DB_NAME -c "CREATE TABLE service_tax (
     SA NUMERIC(10, 2),
     SB NUMERIC(10, 2),
     SC NUMERIC(10, 2) DEFAULT 100,
-    FOREIGN KEY (item_id, item_type) REFERENCES items(item_id, item_type),
+    FOREIGN KEY (item_id, item_type) REFERENCES items(item_id, item_type) ON DELETE CASCADE,
     PRIMARY KEY (service_tax_id)
 );"
 

@@ -5,7 +5,7 @@ const authorizeAdmin = (req, res, next) => {
       next();
     } else {
       return res.status(403).json({
-        "message":"Access Denie. Need Proper Authorization"
+        "message":"Access Denied. Need Proper Authorization"
       });
     }
   }
