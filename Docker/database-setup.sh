@@ -20,5 +20,6 @@ psql -h $HOST -p $PORT -U $USERNAME -d $DB_NAME -c "CREATE TABLE IF NOT EXISTS u
     password TEXT,
     name VARCHAR(255),
     address TEXT,
-    phone VARCHAR(20)
+    phone VARCHAR(20),
+    role VARCHAR(10) CHECK (role IN ('user', 'admin'))
 );"
