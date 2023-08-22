@@ -30,7 +30,7 @@
 
 - [X] Design Database Table for Products & Services
 
-- [ ] Create Commerce Endpoints (Add Product/Service, Get All Product, Get All Service, Get, Update, Delete Product/Service)
+- [X] Create Commerce Endpoints (Add Product/Service, Get All Product, Get All Service, Get, Update, Delete Product/Service)
 
 - [X] Design Database Table for Cart
 
@@ -68,11 +68,11 @@
 
 - [X] Add new Product/Service (Admin Only)
 
-- [ ] Show all Products
+- [X] Show all Products
 
-- [ ] Show all Services
+- [X] Show all Services
 
-- [ ] Get Product/Service
+- [X] Get Product/Service
 
 - [X] Update Product/Service (Admin Only)
 
