@@ -23,7 +23,7 @@ const tokenCheck = (req, res, next) => {
         const role = decodedToken.role
 
         req.userId = userId
-        req.user.role = role
+        req.role = role
         next()
       }
     })
