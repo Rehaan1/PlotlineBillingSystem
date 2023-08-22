@@ -613,7 +613,7 @@ router.get('/',tokenCheck, (req, res) => {
 })
 
 
-router.get('/products',tokenCheck, (req, res) => {
+router.get('/all',tokenCheck, (req, res) => {
 
     // Here timestamp is being used for pagination purposes
     // as Normal Pagination and Offset causes high latency as it 
@@ -628,8 +628,22 @@ router.get('/products',tokenCheck, (req, res) => {
         })
     }
 
+    if (!req.body.itemType) {
+        return res.status(400).json({
+            message: "Missing Required Body Content"
+        })
+    }
+
     // lastTimeStamp = -1 if first query
     const lastTimeStamp = req.body.lastTimeStamp
+    const itemType = req.body.itemType
+
+    if(itemType !== "product" || itemType !== "service")
+    {
+        return res.status(400).json({
+            message: "Invalid item type"
+        })
+    }
 
     dbUserPool.connect()
         .then(client => {
@@ -641,14 +655,16 @@ router.get('/products',tokenCheck, (req, res) => {
                     if(lastTimeStamp === "-1")
                     {
                         query = format(
-                            "SELECT * FROM items ORDER BY timestamp_column DESC LIMIT 10"
+                            "SELECT * FROM items WHERE item_type = %L ORDER BY timestamp_column DESC LIMIT 10",
+                            itemType
                         )
                     }
                     else
                     {
                         query = format(
-                            "SELECT * FROM items WHERE timestamp_column < %L ORDER BY timestamp_column DESC LIMIT 10",
-                            lastTimeStamp
+                            "SELECT * FROM items WHERE timestamp_column < %L AND item_type = %L ORDER BY timestamp_column DESC LIMIT 10",
+                            lastTimeStamp,
+                            itemType
                         )
                     }
                     
