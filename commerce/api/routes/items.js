@@ -613,7 +613,7 @@ router.get('/',tokenCheck, (req, res) => {
 })
 
 
-router.get('/all',tokenCheck, (req, res) => {
+router.post('/all',tokenCheck, (req, res) => {
 
     // Here timestamp is being used for pagination purposes
     // as Normal Pagination and Offset causes high latency as it 
