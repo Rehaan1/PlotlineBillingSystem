@@ -28,13 +28,11 @@
 
 - [X] Create Authentication Functionality Endpoint (Register, Login, Update, Get, Delete User)
 
-- [ ] Design Database Table for Products & Services
+- [X] Design Database Table for Products & Services
 
-- [ ] Create Commerce Product Endpoint (Add, Show All, Get One, Update, Delete Product)
+- [X] Create Commerce Endpoints (Add Product/Service, Get All Product, Get All Service, Get, Update, Delete Product/Service)
 
-- [ ] Create Commerce Service Endpoint (Add, Show All, Get One, Update, Delete Product)
-
-- [ ] Design Database Table for Cart
+- [X] Design Database Table for Cart
 
 - [ ] Design Database Table for Orders
 
@@ -66,29 +64,19 @@
 
 #### Commerce Endpoints
 
-##### Products
+##### Items
 
-- [ ] Add new Product (Admin Only)
+- [X] Add new Product/Service (Admin Only)
 
-- [ ] Show all Product
+- [X] Show all Products
 
-- [ ] Get Product
+- [X] Show all Services
 
-- [ ] Update Product (Admin Only)
+- [X] Get Product/Service
 
-- [ ] Delete Product (Admin Only)
+- [X] Update Product/Service (Admin Only)
 
-##### Services
-
-- [ ] Add new Service (Admin Only)
-
-- [ ] Show all Service
-
-- [ ] Get Service
-
-- [ ] Update Service (Admin Only)
-
-- [ ] Delete Service (Admin Only)
+- [X] Delete Product/Service (Admin Only)
 
 
 
@@ -104,4 +92,4 @@
 
 - [ ] Get Orders
 
-- [ ] Confirm Orders
+- [ ] Create Orders

@@ -55,6 +55,7 @@ router.post('/email/register',(req,res) => {
     const name = req.body.name
     const phone = req.body.phone
     const address = req.body.address
+    const role = "user"
 
     dbUserPool.connect()
     .then(client => {
@@ -83,12 +84,13 @@ router.post('/email/register',(req,res) => {
                             const passwordHash = bcrypt.hashSync(req.body.password, salt)
                             
                             const insertQuery = format(
-                                "INSERT INTO users (email, password, name, address, phone) VALUES (%L, %L, %L, %L, %L) RETURNING *",
+                                "INSERT INTO users (email, password, name, address, phone, role) VALUES (%L, %L, %L, %L, %L, %L) RETURNING *",
                                 email,
                                 passwordHash,
                                 name,
                                 address,
-                                phone
+                                phone,
+                                role
                             )
 
                             client.query(insertQuery)
@@ -192,7 +194,7 @@ router.post('/email/login', (req, res) => {
   
                 
                 const token = jwt.sign(
-                  { userId: user.user_id},
+                  { userId: user.user_id, role: user.role},
                   process.env.JWT_SECRET,
                   { expiresIn: process.env.JWT_EXPIRY }
                 )
