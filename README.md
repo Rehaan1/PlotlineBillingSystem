@@ -60,6 +60,7 @@
 
 - [X] Delete User
 
+- [ ] Allow setting user role to Admin (Admin Only)
 
 
 #### Commerce Endpoints
@@ -90,6 +91,8 @@
 
 - [ ] Calculate Total Bill of Cart
 
-- [ ] Get Orders
+- [ ] Get Orders of User
 
 - [ ] Create Orders
+
+- [ ] Show all Orders (Admin Only)
