@@ -10,7 +10,7 @@
 
 ## Deployed Link : 
 
-## Steps to Start System in Local Machine
+## Steps to Start System in Local Machine :computer:
 1. Go to Docker Folder
 
 2. Create an Environment File .env 
@@ -38,7 +38,7 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 
 6. Now you can do ```docker-compose down``` and then use ```docker-compose up``` to stop and start
 
-7. Voila! Alls Setup
+7. Voila! :fireworks: All's Setup
 
 ## Architecture Diagram
 
@@ -46,7 +46,7 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 ## Possible Improvements
 
 
-## Tasks
+## Tasks :white_check_mark:
 #### Pre Requirements
 - [X] Start a Postgress Container using Docker Compose
 
@@ -74,7 +74,7 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 
 
 
-#### Authentication Endpoints
+#### Authentication Endpoints :lock:
 
 - [X] Register User
 
@@ -89,7 +89,7 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 - [ ] Allow setting user role to Admin (Admin Only)
 
 
-#### Commerce Endpoints
+#### Commerce Endpoints :handbag:
 
 ##### Items
 
@@ -107,18 +107,22 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 
 
 
-#### Orders & Billing Endpoints
+#### Orders & Billing Endpoints :credit_card:
 
-- [ ] Add Product/Service to Cart
+- [X] Add Product/Service to Cart
 
-- [ ] Remove Product/Service from Cart
+- [X] Remove Product/Service from Cart
 
-- [ ] Clear Cart
+- [X] Clear Cart
 
-- [ ] Calculate Total Bill of Cart
+- [X] Calculate Total Bill of Cart
+
+- [ ] Create Orders
 
 - [ ] Get Orders of User
 
-- [ ] Create Orders
+- [ ] Get Order Detail
+
+- [ ] Get Bill for Order
 
 - [ ] Show all Orders (Admin Only)
