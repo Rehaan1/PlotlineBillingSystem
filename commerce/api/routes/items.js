@@ -638,7 +638,7 @@ router.post('/all',tokenCheck, (req, res) => {
     const lastTimeStamp = req.body.lastTimeStamp
     const itemType = req.body.itemType
 
-    if(itemType !== "product" || itemType !== "service")
+    if(itemType !== "product" && itemType !== "service")
     {
         return res.status(400).json({
             message: "Invalid item type"
