@@ -139,7 +139,7 @@ router.get('/',tokenCheck, (req, res) => {
                            
                             return res.status(200).json({
                                 message: "User cart fetched successfully",
-                                data: result.rows[0] 
+                                data: result.rows
                             })
                         })
                         .catch(err => {
