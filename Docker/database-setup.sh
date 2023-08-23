@@ -115,6 +115,7 @@ psql -h $HOST -p $PORT -U $USERNAME -d $DB_NAME -c "CREATE INDEX idx_item_rel_id
 psql -h $HOST -p $PORT -U $USERNAME -d $DB_NAME -c "CREATE TABLE IF NOT EXISTS bill (
     bill_id UUID DEFAULT uuid_generate_v4(),
     item_rel_id UUID,
+    total_value NUMERIC(20,2),
     PRIMARY KEY (bill_id)
 );"
 
