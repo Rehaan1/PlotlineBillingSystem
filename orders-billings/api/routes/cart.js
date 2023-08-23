@@ -48,7 +48,7 @@ router.post('/add',tokenCheck, (req,res) => {
                             }
 
                             const query = format(
-                                "INSERT INTO cart (user_id, item_id, quantity) SELECT %L, %L, %L FROM items WHERE item_id = %L AND %L <= items.quantity",
+                                "INSERT INTO cart (user_id, item_id, quantity) SELECT %L::uuid, %L::uuid, %L FROM items WHERE item_id = %L::uuid AND %L <= items.quantity",
                                 userId,
                                 itemId,
                                 quantity,
