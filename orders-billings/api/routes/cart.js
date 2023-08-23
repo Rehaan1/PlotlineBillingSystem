@@ -21,8 +21,15 @@ router.post('/add',tokenCheck, (req,res) => {
         })
     }
 
+    if (!req.body.type) {
+        return res.status(400).json({
+            message: "Missing Required Body Content"
+        })
+    }
+
     const itemId = req.body.itemId
     const quantity = req.body.quantity
+    const itemType = req.body.type
 
     const userId = req.userId
 
@@ -48,9 +55,10 @@ router.post('/add',tokenCheck, (req,res) => {
                             }
 
                             const query = format(
-                                "INSERT INTO cart (user_id, item_id, quantity) SELECT %L::uuid, %L::uuid, %L FROM items WHERE item_id = %L::uuid AND %L <= items.quantity",
+                                "INSERT INTO cart (user_id, item_id, item_type, quantity) SELECT %L::uuid, %L::uuid, %L, %L FROM items WHERE item_id = %L::uuid AND %L <= items.quantity",
                                 userId,
                                 itemId,
+                                itemType,
                                 quantity,
                                 itemId,
                                 quantity
