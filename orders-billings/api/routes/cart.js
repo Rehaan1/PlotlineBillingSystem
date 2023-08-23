@@ -170,6 +170,93 @@ router.get('/',tokenCheck, (req, res) => {
         })
 })
 
+
+
+router.get('/cartValue',tokenCheck, (req, res) => {
+
+    const userId = req.userId
+
+    dbUserPool.connect()
+        .then(client => {
+            client.query("BEGIN")
+                .then(() => {
+                    
+                    const query = format(
+                        `SELECT
+                        cart.item_id,
+                        cart.user_id,
+                        cart.cart_item_id,
+                        items.name,
+                        items.quantity,
+                        items.image,
+                        items.price,
+                        CASE
+                            WHEN items.item_type = 'product' THEN
+                                (product_tax.pa + product_tax.pb + product_tax.pc) * cart.quantity
+                            WHEN items.item_type = 'service' THEN
+                                (service_tax.sa + service_tax.sb + service_tax.sc) * cart.quantity
+                        END AS total_tax,
+                        (items.price * cart.quantity) AS total_price_before_tax,
+                        CASE
+                            WHEN items.item_type = 'product' THEN
+                                (items.price * cart.quantity) + (product_tax.pa + product_tax.pb + product_tax.pc) * cart.quantity
+                            WHEN items.item_type = 'service' THEN
+                                (items.price * cart.quantity) + (service_tax.sa + service_tax.sb + service_tax.sc) * cart.quantity
+                        END AS total_price_after_tax
+                        FROM
+                            cart
+                        JOIN
+                            items ON cart.item_id = items.item_id
+                        LEFT JOIN
+                            product_tax ON items.item_id = product_tax.item_id
+                        LEFT JOIN
+                            service_tax ON items.item_id = service_tax.item_id
+                        WHERE
+                            cart.user_id = %L;
+                        `,
+                        userId
+                    )
+
+                    client.query(query)
+                        .then(result => {
+                            
+                            client.query("COMMIT")
+                            client.release()
+                           
+                            return res.status(200).json({
+                                message: "User cart value fetched successfully",
+                                data: result.rows
+                            })
+                        })
+                        .catch(err => {
+                            client.query("ROLLBACK")
+                            client.release()
+                            console.log("Error: ", err)
+                            return res.status(500).json({
+                                message: "Query error",
+                                error: err
+                            })
+                        })
+                })
+                .catch(err => {
+                    console.log("Error: ", err)
+                    client.release()
+                    return res.status(500).json({
+                        message: "Database transaction error",
+                        error: err
+                    })
+                })
+        })
+        .catch(err => {
+            console.log(err)
+            return res.status(200).json({
+                message: "Database Connection Error",
+                error: err
+            })
+        })
+})
+
+
 router.delete('/removeItem',tokenCheck, (req, res) => {
 
     if (!req.body.cartItemId) {

@@ -548,7 +548,7 @@ router.patch('/update', tokenCheck, authorizeAdmin, (req,res) => {
 })
 
 
-router.get('/',tokenCheck, (req, res) => {
+router.post('/',tokenCheck, (req, res) => {
 
     if (!req.body.itemId) {
         return res.status(400).json({
