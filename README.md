@@ -11,8 +11,34 @@
 ## Deployed Link : 
 
 ## Steps to Start System in Local Machine
-1. 
+1. Go to Docker Folder
 
+2. Create an Environment File .env 
+
+3. In the file add the following variables and assign values to it (You can use the .env.example file)
+- POSTGRES_ADMIN_USER
+- POSTGRES_ADMIN_PASSWORD
+- POSTGRES_DB
+- POSTGRES_PORT (Keep it 5432)
+- POSTGRES_HOST
+- JWT_SECRET
+- JWT_EXPIRY
+
+4. Run 
+
+``` ./image-builder.sh ```
+
+If unable to execute, give necessary executable permission. eg. ``` chmod +x image-builder.sh ```
+
+5. On Another Terminal run the following to setup database
+
+```./database-setup.sh <DATABASE NAME> <DB USER> ```
+
+If unable to execute, give necessary executable permission. eg. ``` chmod +x database-setup.sh ```
+
+6. Now you can do ```docker-compose down``` and then use ```docker-compose up``` to stop and start
+
+7. Voila! Alls Setup
 
 ## Architecture Diagram
 
