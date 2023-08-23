@@ -34,9 +34,9 @@
 
 - [X] Design Database Table for Cart
 
-- [ ] Design Database Table for Orders
+- [X] Design Database Table for Orders
 
-- [ ] Design Database Table for Billings
+- [X] Design Database Table for Billings
 
 - [ ] Create Orders & Billings Cart Endpoint (Add, Remove, Clear Cart)
 

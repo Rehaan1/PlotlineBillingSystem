@@ -1,0 +1,15 @@
+# ignore node modules
+node_modules
+
+# ignore sensitive files
+private.key
+settings.json
+.env
+
+# ignore git and cache
+.git
+.gitignore
+.cache
+
+# ignore all markdown files
+*.md
