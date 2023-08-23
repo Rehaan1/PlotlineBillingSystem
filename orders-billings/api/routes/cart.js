@@ -127,7 +127,7 @@ router.get('/',tokenCheck, (req, res) => {
                 .then(() => {
                     
                     const query = format(
-                        "SELECT * FROM cart WHERE user_id = %L",
+                        "SELECT cart.*, items.name FROM cart JOIN items ON cart.item_id = items.item_id WHERE cart.user_id = %L;",
                         userId
                     )
 
