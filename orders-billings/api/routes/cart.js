@@ -431,7 +431,7 @@ router.get('/placeOrder',tokenCheck, (req, res) => {
                                 const item_id = row.item_id
                                 const quantity = row.quantity
                                 return format(
-                                    'UPDATE items SET quantity = quantity - %L WHERE item_id = %L',
+                                    'UPDATE items SET quantity = quantity - %L WHERE item_id = %L;',
                                     quantity,
                                     item_id
                                 )
@@ -483,7 +483,7 @@ router.get('/placeOrder',tokenCheck, (req, res) => {
 
                                                         // create a bill id with total value
                                                         const insertQuery = format(
-                                                            "INSERT INTO bill (item_rel_id, total_val) VALUES (%L::uuid, %L) RETURNING *",
+                                                            "INSERT INTO bill (item_rel_id, total_value) VALUES (%L::uuid, %L) RETURNING *",
                                                             item_rel_id,
                                                             totalVal
                                                         )
