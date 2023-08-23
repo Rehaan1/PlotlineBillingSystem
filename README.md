@@ -64,7 +64,7 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 
 - [X] Design Database Table for Billings
 
-- [ ] Create Orders & Billings Cart Endpoint (Add, Remove, Clear Cart)
+- [X] Create Orders & Billings Cart Endpoint (Add, Remove, Clear Cart)
 
 - [ ] Create Orders & Billings Orders Endpoint (Get All, Get One, Confirm Order)
 
@@ -117,7 +117,7 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 
 - [X] Calculate Total Bill of Cart
 
-- [ ] Create Orders
+- [X] Create Orders
 
 - [ ] Get Orders of User
 
