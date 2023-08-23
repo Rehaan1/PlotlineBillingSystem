@@ -48,15 +48,17 @@ router.post('/add',tokenCheck, (req,res) => {
                             }
 
                             const query = format(
-                                "INSERT INTO cart (user_id, item_id, quantity) VALUES (%L, %L, %L)",
+                                "INSERT INTO cart (user_id, item_id, quantity) SELECT %L, %L, %L FROM items WHERE item_id = %L AND %L <= items.quantity",
                                 userId,
+                                itemId,
+                                quantity,
                                 itemId,
                                 quantity
                             )
 
                             client.query(query)
                                 .then( result => {
-                                    
+
                                     client.query("COMMIT")
                                     client.release()
 
