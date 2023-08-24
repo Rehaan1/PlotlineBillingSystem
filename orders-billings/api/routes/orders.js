@@ -303,8 +303,7 @@ router.get('/admin-get-orders', tokenCheck, authorizeAdmin, (req,res) => {
                     ou.user_id,
                     o.bill_id
                     FROM order_user_rel ou
-                    JOIN orders o ON ou.order_id = o.order_id;`,
-                    userId
+                    JOIN orders o ON ou.order_id = o.order_id`
                 )
 
                 client.query(query)
