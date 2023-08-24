@@ -187,7 +187,7 @@ router.get('/cartValue',tokenCheck, (req, res) => {
                         cart.user_id,
                         cart.cart_item_id,
                         items.name,
-                        items.quantity,
+                        cart.quantity,
                         items.image,
                         items.price,
                         CASE
