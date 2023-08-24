@@ -42,5 +42,18 @@ services:
     ports:
       - "6001:6001"
 
+  nginx:
+    image: plotlinebilling/nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - auth
+      - commerce
+      - orders-billings
+    links:
+      - auth
+      - commerce
+      - orders-billings
+
 volumes:
   postgresDB_data:

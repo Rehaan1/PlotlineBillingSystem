@@ -187,7 +187,7 @@ router.get('/cartValue',tokenCheck, (req, res) => {
                         cart.user_id,
                         cart.cart_item_id,
                         items.name,
-                        items.quantity,
+                        cart.quantity,
                         items.image,
                         items.price,
                         CASE
@@ -514,7 +514,7 @@ router.get('/placeOrder',tokenCheck, (req, res) => {
 
                                                                         client.query(query)
                                                                             .then(result => {
-
+                                                                                
                                                                                 // once order successfully placed clear cart
                                                                                 
                                                                                 const query = format(
@@ -536,7 +536,8 @@ router.get('/placeOrder',tokenCheck, (req, res) => {
 
                                                                                         return res.status(200).json({
                                                                                             message: "Ordered Placed Successfully",
-                                                                                            data: result.rowCount 
+                                                                                            data: result.rowCount,
+                                                                                            orderId: orderId
                                                                                         })
 
                                                                                     })

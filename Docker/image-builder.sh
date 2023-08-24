@@ -8,3 +8,6 @@ docker build -t plotlinebilling/commerce-service ../commerce
 
 # Build Docker image for orders and billings service
 docker build -t plotlinebilling/orders-billings ../orders-billings
+
+# Build Docker image for Nginx
+docker build -t plotlinebilling/nginx ../nginx
