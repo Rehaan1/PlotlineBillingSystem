@@ -26,7 +26,7 @@
 
 4. Run 
 
-``` ./image-builder.sh ```
+``` ./setup.sh ```
 
 If unable to execute, give necessary executable permission. eg. ``` chmod +x image-builder.sh ```
 
@@ -70,7 +70,7 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 
 - [X] Create Orders & Billings Billing Endpoint (Get Bill)
 
-- [ ] Admin View
+- [X] Admin View
 
 
 
@@ -86,7 +86,7 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 
 - [X] Delete User
 
-- [ ] Allow setting user role to Admin (Admin Only)
+- [X] Allow setting user role to Admin (Admin Only)
 
 
 #### Commerce Endpoints :handbag:
@@ -125,4 +125,4 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 
 - [X] Get Bill for Order
 
-- [ ] Show all Orders (Admin Only)
+- [X] Show all Orders (Admin Only)
