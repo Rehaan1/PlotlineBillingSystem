@@ -96,24 +96,29 @@ router.post('/order', tokenCheck, (req,res) => {
 
                         const query = format(
                             `SELECT
-                            io.item_id,
-                            io.quantity,
-                            i.name,
-                            i.price,
-                            i.item_type,
-                            CASE
-                                WHEN i.item_type = 'product' THEN pt.pa
-                                WHEN i.item_type = 'service' THEN st.sa
-                            END AS tax_a,
-                            CASE
-                                WHEN i.item_type = 'product' THEN pt.pb
-                                WHEN i.item_type = 'service' THEN st.sb
-                            END AS tax_b,
-                            CASE
-                                WHEN i.item_type = 'product' THEN pt.pc
-                                WHEN i.item_type = 'service' THEN st.sc
-                            END AS tax_c,
-                            b.total_value
+                                io.item_id,
+                                io.quantity,
+                                i.name,
+                                i.price,
+                                i.item_type,
+                                CASE
+                                    WHEN i.item_type = 'product' THEN pt.pa
+                                    WHEN i.item_type = 'service' THEN st.sa
+                                END AS tax_a,
+                                CASE
+                                    WHEN i.item_type = 'product' THEN pt.pb
+                                    WHEN i.item_type = 'service' THEN st.sb
+                                END AS tax_b,
+                                CASE
+                                    WHEN i.item_type = 'product' THEN pt.pc
+                                    WHEN i.item_type = 'service' THEN st.sc
+                                END AS tax_c,
+                                (i.price * io.quantity) + (io.quantity * (CASE
+                                    WHEN i.item_type = 'product' THEN pt.pa + pt.pb + pt.pc
+                                    WHEN i.item_type = 'service' THEN st.sa + st.sb + st.sc
+                                    ELSE 0
+                                END)) AS total_item_value,
+                                b.total_value AS total_order_value
                             FROM
                                 orders o
                             JOIN
