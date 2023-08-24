@@ -17,7 +17,13 @@ router.get('/', tokenCheck, (req,res) => {
             .then(() => {
                 
                 const query = format(
-                    "SELECT * FROM order_user_rel WHERE user_id = %L",
+                    `SELECT ou.order_user_rel_id,
+                    ou.order_id,
+                    ou.user_id,
+                    o.bill_id
+                    FROM order_user_rel ou
+                    JOIN orders o ON ou.order_id = o.order_id
+                    WHERE ou.user_id = %L;`,
                     userId
                 )
 
