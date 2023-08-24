@@ -262,7 +262,7 @@ router.patch('/role/update', tokenCheck, authorizeAdmin, (req, res) => {
           const query = format(
             `UPDATE users
             SET role = %L
-            WHERE user_id = %L`,
+            WHERE user_id = %L RETURNING *`,
             role,
             userId
           )
@@ -284,7 +284,7 @@ router.patch('/role/update', tokenCheck, authorizeAdmin, (req, res) => {
               return res.status(200).json({
                 message: "Role Updated Successfully"
               })
-              
+
             })
             .catch(err => {
               client.query("ROLLBACK")
