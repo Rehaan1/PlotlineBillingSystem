@@ -66,7 +66,7 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 
 - [X] Create Orders & Billings Cart Endpoint (Add, Remove, Clear Cart)
 
-- [ ] Create Orders & Billings Orders Endpoint (Get All, Get One, Confirm Order)
+- [X] Create Orders & Billings Orders Endpoint (Get All, Get One, Confirm Order)
 
 - [ ] Create Orders & Billings Billing Endpoint (Get Bill)
 
@@ -119,9 +119,9 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 
 - [X] Create Orders
 
-- [ ] Get Orders of User
+- [X] Get Orders of User
 
-- [ ] Get Order Detail
+- [X] Get Order Detail
 
 - [ ] Get Bill for Order
 
