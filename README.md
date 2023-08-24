@@ -68,7 +68,7 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 
 - [X] Create Orders & Billings Orders Endpoint (Get All, Get One, Confirm Order)
 
-- [ ] Create Orders & Billings Billing Endpoint (Get Bill)
+- [X] Create Orders & Billings Billing Endpoint (Get Bill)
 
 - [ ] Admin View
 
@@ -123,6 +123,6 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 
 - [X] Get Order Detail
 
-- [ ] Get Bill for Order
+- [X] Get Bill for Order
 
 - [ ] Show all Orders (Admin Only)

@@ -5,6 +5,8 @@ const { dbUserPool } = require('../db/db')
 const format = require('pg-format')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const authorizeAdmin = require('../middlewares/authorizeAdmin')
+const tokenCheck = require('../middlewares/tokenCheck')
 
 router.get('/',(req,res) => {
     return res.status(200).json({
@@ -231,6 +233,85 @@ router.post('/email/login', (req, res) => {
           error: err
         })
     })
+})
+
+
+
+router.patch('/role/update', tokenCheck, authorizeAdmin, (req, res) => {
+    
+  if ( !req.body.userId) {
+    return res.status(400).json({
+      message: "Missing Required Body Content"
+    })
+  }
+
+  if ( !req.body.role) {
+      return res.status(400).json({
+        message: "Missing Required Body Content"
+      })
+    }
+
+  const role = req.body.role
+  const userId = req.body.userId
+
+  dbUserPool.connect()
+    .then(client => {
+      client.query("BEGIN")
+        .then(() => {
+
+          const query = format(
+            `UPDATE users
+            SET role = %L
+            WHERE user_id = %L`,
+            role,
+            userId
+          )
+
+          client.query(query)
+            .then(result => {
+              
+              if (result.rows.length === 0) {
+                client.release()
+
+                return res.status(401).json({
+                  message: "Role Update Failed"
+                })
+              }
+
+              client.query("COMMIT")
+              client.release()
+
+              return res.status(200).json({
+                message: "Role Updated Successfully"
+              })
+              
+            })
+            .catch(err => {
+              client.query("ROLLBACK")
+              client.release()
+              console.log("Error: ", err)
+              return res.status(500).json({
+                message: "Query error",
+                error: err
+              })
+            })
+        })
+        .catch(err => {
+          console.log("Error: ", err)
+          client.release()
+          return res.status(500).json({
+            message: "Database transaction error",
+            error: err
+          })
+        })
+    })
+    .catch(err => {
+      console.log(err)
+      return res.status(500).json({
+        message: "Database Connection Error",
+        error: err
+      })
+  })
 })
 
 module.exports = router
