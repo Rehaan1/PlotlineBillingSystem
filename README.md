@@ -8,7 +8,7 @@
 
 ## Backend Documentation For the Amigos :cowboy_hat_face:: https://documenter.getpostman.com/view/14038453/2s9Y5TzQF4
 
-## Deployed Link : 
+## Deployed Link (Deployed on GCP :cloud: Compute Instance) : http://35.196.188.168/
 
 ## Steps to Start System in Local Machine :computer:
 1. Go to Docker Folder
@@ -44,7 +44,13 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 
 
 ## Possible Improvements
+1. Moving to Docker Swarm for ease of scaling and slowly migrate to Kubernetes as required
 
+2. Adding Logging through providers like LogTail for capturing detailed Logs for Error Detection and Debugging
+
+3. Using different Database users for read, create, update to ensure further security
+
+4. Using Nignx further as a Load Balancer for the microservices
 
 ## Tasks :white_check_mark:
 #### Pre Requirements
