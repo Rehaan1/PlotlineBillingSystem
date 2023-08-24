@@ -29,6 +29,7 @@
 ``` ./setup.sh ```
 
 If unable to execute, give necessary executable permission. eg. ``` chmod +x image-builder.sh ```
+If unable to execute, give necessary executable permission. eg. ``` chmod +x setup.sh ```
 
 5. On Another Terminal run the following to setup database
 
