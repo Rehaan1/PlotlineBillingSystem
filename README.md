@@ -10,9 +10,35 @@
 
 ## Deployed Link : 
 
-## Steps to Start System in Local Machine
-1. 
+## Steps to Start System in Local Machine :computer:
+1. Go to Docker Folder
 
+2. Create an Environment File .env 
+
+3. In the file add the following variables and assign values to it (You can use the .env.example file)
+- POSTGRES_ADMIN_USER
+- POSTGRES_ADMIN_PASSWORD
+- POSTGRES_DB
+- POSTGRES_PORT (Keep it 5432)
+- POSTGRES_HOST
+- JWT_SECRET
+- JWT_EXPIRY
+
+4. Run 
+
+``` ./setup.sh ```
+
+If unable to execute, give necessary executable permission. eg. ``` chmod +x image-builder.sh ``` and eg. ``` chmod +x setup.sh ```
+
+5. On Another Terminal run the following to setup database
+
+```./database-setup.sh <DATABASE NAME> <DB USER> ```
+
+If unable to execute, give necessary executable permission. eg. ``` chmod +x database-setup.sh ```
+
+6. Now you can do ```docker-compose down``` and then use ```docker-compose up``` to stop and start
+
+7. Voila! :fireworks: All's Setup
 
 ## Architecture Diagram
 
@@ -20,7 +46,7 @@
 ## Possible Improvements
 
 
-## Tasks
+## Tasks :white_check_mark:
 #### Pre Requirements
 - [X] Start a Postgress Container using Docker Compose
 
@@ -34,21 +60,21 @@
 
 - [X] Design Database Table for Cart
 
-- [ ] Design Database Table for Orders
+- [X] Design Database Table for Orders
 
-- [ ] Design Database Table for Billings
+- [X] Design Database Table for Billings
 
-- [ ] Create Orders & Billings Cart Endpoint (Add, Remove, Clear Cart)
+- [X] Create Orders & Billings Cart Endpoint (Add, Remove, Clear Cart)
 
-- [ ] Create Orders & Billings Orders Endpoint (Get All, Get One, Confirm Order)
+- [X] Create Orders & Billings Orders Endpoint (Get All, Get One, Confirm Order)
 
-- [ ] Create Orders & Billings Billing Endpoint (Get Bill)
+- [X] Create Orders & Billings Billing Endpoint (Get Bill)
 
-- [ ] Admin View
+- [X] Admin View
 
 
 
-#### Authentication Endpoints
+#### Authentication Endpoints :lock:
 
 - [X] Register User
 
@@ -60,9 +86,10 @@
 
 - [X] Delete User
 
+- [X] Allow setting user role to Admin (Admin Only)
 
 
-#### Commerce Endpoints
+#### Commerce Endpoints :handbag:
 
 ##### Items
 
@@ -80,16 +107,22 @@
 
 
 
-#### Orders & Billing Endpoints
+#### Orders & Billing Endpoints :credit_card:
 
-- [ ] Add Product/Service to Cart
+- [X] Add Product/Service to Cart
 
-- [ ] Remove Product/Service from Cart
+- [X] Remove Product/Service from Cart
 
-- [ ] Clear Cart
+- [X] Clear Cart
 
-- [ ] Calculate Total Bill of Cart
+- [X] Calculate Total Bill of Cart
 
-- [ ] Get Orders
+- [X] Create Orders
 
-- [ ] Create Orders
+- [X] Get Orders of User
+
+- [X] Get Order Detail
+
+- [X] Get Bill for Order
+
+- [X] Show all Orders (Admin Only)

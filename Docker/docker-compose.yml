@@ -33,5 +33,14 @@ services:
     ports:
       - "5001:5001"
 
+  orders-billings:
+    image: plotlinebilling/orders-billings
+    env_file:
+      - ./.env
+    environment:
+      - PORT=6001
+    ports:
+      - "6001:6001"
+
 volumes:
   postgresDB_data:
