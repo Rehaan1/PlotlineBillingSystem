@@ -42,6 +42,21 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 
 ## Architecture Diagram
 
+##### System Architecture Diagram:
+
+![Plotline Images](https://github.com/Rehaan1/PlotlineBillingSystem/assets/38107493/c824a46f-77a4-4807-bc65-9bbd3ecb9e55)
+
+##### Database Design
+- **Note**: Items table was *Horizontal Partitioned* for faster indexed search in case of millions of rows by list on item_type to two new tables items_product and items_service
+
+![ERD](https://github.com/Rehaan1/PlotlineBillingSystem/assets/38107493/634949c3-319a-459b-8bbf-e9f86894995a)
+
+##### Database Choice Reasons
+- Database chosen was Postgres due to its strong ACID Compliance and ability to run complex queries
+- Strong MVCC Support over MySQL
+- Items table was horizontal partitioned for faster index search when millions of rows are there
+- Pagination using timestamp instead of offset was used in get all products and services to reduce time overhead of removing unwanted pages fetched from databases
+- Proper indexing was done on most queried coloumns
 
 ## Possible Improvements
 1. Moving to Docker Swarm for ease of scaling and slowly migrate to Kubernetes as required
