@@ -1,6 +1,7 @@
 const express = require('express')
 const request = require('supertest')
 const authRoute = require('../api/routes/auth')
+const userRoute = require('../api/routes/users')
 const { Pool } = require('pg')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
@@ -37,6 +38,7 @@ app.use(express.json())
 
 
 app.use('/auth', authRoute)
+app.use('/user', userRoute)
 
 
 describe('Integration Tests for Auth API', ()=>{
@@ -281,6 +283,195 @@ describe('Integration Tests for Auth API', ()=>{
                 message: "Missing Required Body Content"
             })
         })
+
+    })
+
+    describe('User Endpoint Test', () =>{
+
+        it('GET /user - success - get user data', async () => {
+            
+            const mockClient = {
+                query: jest.fn().mockResolvedValue({ rows: [{user_id:"mock-user-id", role:"admin", name: "mock-name", phone: "mock-phone"}], rowCount: 1 }),
+                release: jest.fn(),
+            }
+
+            const mockConnect = jest.fn().mockResolvedValue(mockClient)
+
+            const dbUserPool = new Pool()
+            dbUserPool.connect = mockConnect
+
+            const {body, statusCode} = await request(app).get('/user')
+                .set('Authorization', 'Bearer valid-access-token')
+                
+
+            expect(tokenCheck).toHaveBeenCalled()
+
+            expect(mockConnect).toHaveBeenCalled()
+            expect(mockClient.query).toHaveBeenCalledTimes(2)
+            
+            expect(statusCode).toBe(200)
+            expect(body).toEqual({
+                message: "User Data Fetched Successfully",
+                data: expect.objectContaining({
+                        user_id: "mock-user-id", 
+                        role: "admin", 
+                        name: "mock-name", 
+                        phone: "mock-phone"
+                    })
+            })
+        })
+
+
+        it('GET /user - failure - user data not found', async () => {
+            
+            const mockClient = {
+                query: jest.fn().mockResolvedValue({ rows: [], rowCount: 0 }),
+                release: jest.fn(),
+            }
+
+            const mockConnect = jest.fn().mockResolvedValue(mockClient)
+
+            const dbUserPool = new Pool()
+            dbUserPool.connect = mockConnect
+
+            const {body, statusCode} = await request(app).get('/user')
+                .set('Authorization', 'Bearer valid-access-token')
+                
+
+            expect(tokenCheck).toHaveBeenCalled()
+
+            expect(mockConnect).toHaveBeenCalled()
+            expect(mockClient.query).toHaveBeenCalledTimes(2)
+            
+            expect(statusCode).toBe(409)
+            expect(body).toEqual({
+                message: "No User Data"
+            })
+        })
+
+
+        it('PATCH /user/update - success - update user data', async () => {
+            
+            const mockClient = {
+                query: jest.fn().mockResolvedValue({ rows: [{user_id:"mock-user-id", address:"mock-address", name: "mock-name", phone: "mock-phone"}], rowCount: 1 }),
+                release: jest.fn(),
+            }
+
+            const mockConnect = jest.fn().mockResolvedValue(mockClient)
+
+            const dbUserPool = new Pool()
+            dbUserPool.connect = mockConnect
+
+            const {body, statusCode} = await request(app).patch('/user/update')
+                .set('Authorization', 'Bearer valid-access-token')
+                .send({
+                    userId: "mock-userId",
+                    name: "mock-name",
+                    address: "mock-address",
+                    phone: "mock-phone"
+                })
+                
+
+            expect(tokenCheck).toHaveBeenCalled()
+
+            expect(mockConnect).toHaveBeenCalled()
+            expect(mockClient.query).toHaveBeenCalledTimes(3)
+            
+            expect(statusCode).toBe(200)
+            expect(body).toEqual({
+                message: "User updated successfully"
+            })
+        })
+
+        it('PATCH /user/update - failure - user not found', async () => {
+            
+            const mockClient = {
+                query: jest.fn().mockResolvedValue({ rows: [], rowCount: 0 }),
+                release: jest.fn(),
+            }
+
+            const mockConnect = jest.fn().mockResolvedValue(mockClient)
+
+            const dbUserPool = new Pool()
+            dbUserPool.connect = mockConnect
+
+            const {body, statusCode} = await request(app).patch('/user/update')
+                .set('Authorization', 'Bearer valid-access-token')
+                .send({
+                    userId: "mock-userId",
+                    name: "mock-name",
+                    address: "mock-address",
+                    phone: "mock-phone"
+                })
+                
+
+            expect(tokenCheck).toHaveBeenCalled()
+
+            expect(mockConnect).toHaveBeenCalled()
+            expect(mockClient.query).toHaveBeenCalledTimes(3)
+            
+            expect(statusCode).toBe(404)
+            expect(body).toEqual({
+                message: "User not found"
+            })
+        })
+
+
+        it('DELETE /user/remove - failure - user not found', async () => {
+            
+            const mockClient = {
+                query: jest.fn().mockResolvedValue({ rows: [], rowCount: 0 }),
+                release: jest.fn(),
+            }
+
+            const mockConnect = jest.fn().mockResolvedValue(mockClient)
+
+            const dbUserPool = new Pool()
+            dbUserPool.connect = mockConnect
+
+            const {body, statusCode} = await request(app).delete('/user/remove')
+                .set('Authorization', 'Bearer valid-access-token')
+                
+
+            expect(tokenCheck).toHaveBeenCalled()
+
+            expect(mockConnect).toHaveBeenCalled()
+            expect(mockClient.query).toHaveBeenCalledTimes(3)
+            
+            expect(statusCode).toBe(404)
+            expect(body).toEqual({
+                message: "User not found"
+            })
+        })
+
+
+        it('DELETE /user/remove - success - user deleted', async () => {
+            
+            const mockClient = {
+                query: jest.fn().mockResolvedValue({ rows: [{user_id:"mock-user-id", address:"mock-address", name: "mock-name", phone: "mock-phone"}], rowCount: 1 }),
+                release: jest.fn(),
+            }
+
+            const mockConnect = jest.fn().mockResolvedValue(mockClient)
+
+            const dbUserPool = new Pool()
+            dbUserPool.connect = mockConnect
+
+            const {body, statusCode} = await request(app).delete('/user/remove')
+                .set('Authorization', 'Bearer valid-access-token')
+                
+
+            expect(tokenCheck).toHaveBeenCalled()
+
+            expect(mockConnect).toHaveBeenCalled()
+            expect(mockClient.query).toHaveBeenCalledTimes(3)
+            
+            expect(statusCode).toBe(200)
+            expect(body).toEqual({
+                message: "User removed successfully"
+            })
+        })
+
 
     })
 
