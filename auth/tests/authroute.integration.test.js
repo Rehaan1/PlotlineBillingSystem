@@ -1,7 +1,9 @@
 const express = require('express')
 const request = require('supertest')
 const authRoute = require('../api/routes/auth')
-const { Pool } = require('pg');
+const { Pool } = require('pg')
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs')
 
 // setup for to mock pg
 jest.mock('pg', () => {
@@ -11,7 +13,17 @@ jest.mock('pg', () => {
       end: jest.fn()
     };
     return { Pool: jest.fn(() => mPool) };
-  });
+  })
+
+jest.mock('jsonwebtoken', () => ({
+    sign: jest.fn(),
+    genSaltSync: jest.fn(),
+    hashSync: jest.fn()
+  }))
+
+jest.mock('bcryptjs', () => ({
+    compareSync: jest.fn(),
+  }))
 
 const app = express()
 
@@ -79,6 +91,11 @@ describe('Integration Tests for Auth API', ()=>{
             
             const mockConnect = jest.fn().mockResolvedValue(mockClient)
 
+            const mockSalt = 'mock-salt';
+            const mockHashedPassword = 'mock-hashed-password'
+            bcrypt.genSaltSync = jest.fn().mockReturnValue(mockSalt)
+            bcrypt.hashSync = jest.fn().mockReturnValue(mockHashedPassword)
+
             const dbUserPool = new Pool()
             dbUserPool.connect = mockConnect
 
@@ -92,6 +109,8 @@ describe('Integration Tests for Auth API', ()=>{
 
             expect(mockConnect).toHaveBeenCalled()
             expect(mockClient.query).toHaveBeenCalledTimes(4)
+            expect(bcrypt.genSaltSync).toHaveBeenCalledWith(10)
+            expect(bcrypt.hashSync).toHaveBeenCalledWith('test123', mockSalt)
 
             expect(statusCode).toBe(200)
             expect(body).toEqual({
@@ -126,6 +145,71 @@ describe('Integration Tests for Auth API', ()=>{
             expect(statusCode).toBe(409)
             expect(body).toEqual({
                 message: "Email already exists"
+            })
+        })
+
+
+        it('POST /auth/email/login - failure - user does not exists', async () => {
+            
+            const mockClient = {
+                query: jest.fn().mockResolvedValue({ rows: [], rowCount: 0}),
+                release: jest.fn(),
+            }
+            
+            const mockConnect = jest.fn().mockResolvedValue(mockClient)
+
+            const dbUserPool = new Pool()
+            dbUserPool.connect = mockConnect
+
+            const {body, statusCode} = await request(app).post('/auth/email/login').send({
+                email: "bob@gmail.com",
+                password: "test123",
+            })
+
+            expect(mockConnect).toHaveBeenCalled()
+            expect(mockClient.query).toHaveBeenCalledTimes(2)
+
+            expect(statusCode).toBe(401)
+            expect(body).toEqual({
+                message: "Email or password is incorrect"
+            })
+        })
+
+        it('POST /auth/email/login - success - user logged in', async () => {
+            
+            const mockClient = {
+                query: jest.fn().mockResolvedValue({ rows: [{user_id:"mock-user-id", role:"user", password: 'mock-hashed-password' }], rowCount: 1 }),
+                release: jest.fn(),
+            }
+
+            const mockToken = 'mock-token-jwt-with-user-id'
+            jwt.sign.mockReturnValue(mockToken)
+
+            const mockPasswordMatch = true;
+            bcrypt.compareSync.mockReturnValue(mockPasswordMatch);
+
+            const mockConnect = jest.fn().mockResolvedValue(mockClient)
+
+            const dbUserPool = new Pool()
+            dbUserPool.connect = mockConnect
+
+            const {body, statusCode} = await request(app).post('/auth/email/login').send({
+                email: "bob@gmail.com",
+                password: "test123",
+            })
+
+            expect(mockConnect).toHaveBeenCalled()
+            expect(mockClient.query).toHaveBeenCalledTimes(2)
+            expect(bcrypt.compareSync).toHaveBeenCalledWith('test123', 'mock-hashed-password')
+            expect(jwt.sign).toHaveBeenCalledWith(
+                { userId: 'mock-user-id', role: 'user' },
+                process.env.JWT_SECRET,
+                { expiresIn: process.env.JWT_EXPIRY }
+            )
+            expect(statusCode).toBe(200)
+            expect(body).toEqual({
+                message: "Login successful",
+                token: expect.any(String)
             })
         })
 
