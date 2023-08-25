@@ -51,6 +51,12 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 
 ![ERD](https://github.com/Rehaan1/PlotlineBillingSystem/assets/38107493/634949c3-319a-459b-8bbf-e9f86894995a)
 
+##### Database Choice Reasons
+- Database chosen was Postgres due to its strong ACID Compliance and ability to run complex queries
+- Strong MVCC Support over MySQL
+- Items table was horizontal partitioned for faster index search when millions of rows are there
+- Pagination using timestamp instead of offset was used in get all products and services to reduce time overhead of removing unwanted pages fetched from databases
+- Proper indexing was done on most queried coloumns
 
 ## Possible Improvements
 1. Moving to Docker Swarm for ease of scaling and slowly migrate to Kubernetes as required
