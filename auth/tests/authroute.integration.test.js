@@ -4,6 +4,8 @@ const authRoute = require('../api/routes/auth')
 const { Pool } = require('pg')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
+const tokenCheck = require('../api/middlewares/tokenCheck')
+const authorizeAdmin = require('../api/middlewares/authorizeAdmin')
 
 // setup for to mock pg
 jest.mock('pg', () => {
@@ -24,6 +26,9 @@ jest.mock('jsonwebtoken', () => ({
 jest.mock('bcryptjs', () => ({
     compareSync: jest.fn(),
   }))
+
+jest.mock('../api/middlewares/tokenCheck', () => jest.fn((req, res, next) => next()));
+jest.mock('../api/middlewares/authorizeAdmin', () => jest.fn((req, res, next) => next()));
 
 const app = express()
 
@@ -210,6 +215,70 @@ describe('Integration Tests for Auth API', ()=>{
             expect(body).toEqual({
                 message: "Login successful",
                 token: expect.any(String)
+            })
+        })
+
+    })
+
+
+    describe('Admin Endpoint Test', () => {
+
+        it('PATCH /auth/role/update - success - role updated', async () => {
+            
+            const mockClient = {
+                query: jest.fn().mockResolvedValue({ rows: [{user_id:"mock-user-id", role:"admin", password: 'mock-hashed-password' }], rowCount: 1 }),
+                release: jest.fn(),
+            }
+
+            const mockConnect = jest.fn().mockResolvedValue(mockClient)
+
+            const dbUserPool = new Pool()
+            dbUserPool.connect = mockConnect
+
+            const {body, statusCode} = await request(app).patch('/auth/role/update')
+                .set('Authorization', 'Bearer valid-access-token')
+                .send({
+                    userId: "mock-user-id",
+                    role: "admin",
+                })
+
+            expect(tokenCheck).toHaveBeenCalled()
+            expect(authorizeAdmin).toHaveBeenCalled()
+
+            expect(mockConnect).toHaveBeenCalled()
+            expect(mockClient.query).toHaveBeenCalledTimes(3)
+            
+            expect(statusCode).toBe(200)
+            expect(body).toEqual({
+                message: "Role Updated Successfully"
+            })
+        })
+
+        it('PATCH /auth/role/update - failure - missing required body - userId', async () => {
+            
+            const mockClient = {
+                query: jest.fn().mockResolvedValue({ rows: [{user_id:"mock-user-id", role:"admin", password: 'mock-hashed-password' }], rowCount: 1 }),
+                release: jest.fn(),
+            }
+
+            const mockConnect = jest.fn().mockResolvedValue(mockClient)
+
+            const dbUserPool = new Pool()
+            dbUserPool.connect = mockConnect
+
+            const {body, statusCode} = await request(app).patch('/auth/role/update')
+                .set('Authorization', 'Bearer valid-access-token')
+                .send({
+                    userId: "",
+                    role: "admin",
+                })
+
+            expect(tokenCheck).toHaveBeenCalled()
+            expect(authorizeAdmin).toHaveBeenCalled()
+            
+            expect(statusCode).toBe(400)
+            expect(body).toEqual({
+                message: "Missing Required Body Content"
             })
         })
 
