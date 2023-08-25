@@ -42,6 +42,15 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 
 ## Architecture Diagram
 
+##### System Architecture Diagram:
+
+![Plotline Images](https://github.com/Rehaan1/PlotlineBillingSystem/assets/38107493/c824a46f-77a4-4807-bc65-9bbd3ecb9e55)
+
+##### Database Design
+- **Note**: Items table was *Horizontal Partitioned* for faster indexed search in case of millions of rows by list on item_type to two new tables items_product and items_service
+
+![ERD](https://github.com/Rehaan1/PlotlineBillingSystem/assets/38107493/634949c3-319a-459b-8bbf-e9f86894995a)
+
 
 ## Possible Improvements
 1. Moving to Docker Swarm for ease of scaling and slowly migrate to Kubernetes as required
