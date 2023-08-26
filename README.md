@@ -23,6 +23,8 @@
 - POSTGRES_HOST
 - JWT_SECRET
 - JWT_EXPIRY
+- PROJECT_ID (GCP Project ID for storing invoice)
+- BUCKET_NAME (GCP Bucket Name for storing invoice)
 
 4. Run 
 
