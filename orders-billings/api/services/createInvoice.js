@@ -1,28 +1,29 @@
-const fs = require("fs");
-const PDFDocument = require("pdfkit");
+const fs = require("fs")
+const path = require('path')
+const PDFDocument = require("pdfkit")
 
 async function createInvoice(invoice, path) {
-    let doc = new PDFDocument({ size: "A4", margin: 50 });
+    let doc = new PDFDocument({ size: "A4", margin: 50 })
 
-    generateHeader(doc);
-    generateCustomerInformation(doc, invoice);
-    generateInvoiceTable(doc, invoice);
-    generateFooter(doc);
+    generateHeader(doc)
+    generateCustomerInformation(doc, invoice)
+    generateInvoiceTable(doc, invoice)
+    generateFooter(doc)
 
     try {
         await new Promise((resolve, reject) => {
             const writeStream = fs.createWriteStream(path)
 
-            doc.pipe(writeStream);
+            doc.pipe(writeStream)
 
             doc.end()
 
             writeStream.on('finish', () => {
-                resolve();
+                resolve()
             })
 
             writeStream.on('error', (error) => {
-                reject(error);
+                reject(error)
             })
         })
 
@@ -37,9 +38,15 @@ async function createInvoice(invoice, path) {
 }
 
 function generateHeader(doc) {
-    doc.registerFont("Roboto", "./fonts/Roboto-Light.ttf");
-    doc.registerFont("Roboto-Bold", "./fonts/Roboto-Medium.ttf");
-    doc.image("./logo.png", 50, 45, { width: 50 })
+
+    const f1 = path.join(__dirname, 'fonts', 'Roboto-Light.ttf')
+    const f2 = path.join(__dirname, 'fonts', 'Roboto-Medium.ttf')
+
+    doc.registerFont("Roboto", f1)
+    doc.registerFont("Roboto-Bold", f2)
+    const logoPath = path.join(__dirname, 'logo.png')
+
+    doc.image(logoPath, 50, 45, { width: 50 })
         .fillColor("#444444")
         .fontSize(20)
         .text("Disrupt Tech.", 110, 57)
@@ -47,15 +54,15 @@ function generateHeader(doc) {
         .text("Disrupt Tech.", 200, 50, { align: "right" })
         .text("Horizon Avenue", 200, 65, { align: "right" })
         .text("Dubai Main Road, UAE, 500001", 200, 80, { align: "right" })
-        .moveDown();
+        .moveDown()
 }
 
 function generateCustomerInformation(doc, invoice) {
-    doc.fillColor("#444444").fontSize(20).text("Invoice", 50, 160);
+    doc.fillColor("#444444").fontSize(20).text("Invoice", 50, 160)
 
-    generateHr(doc, 185);
+    generateHr(doc, 185)
 
-    const customerInformationTop = 200;
+    const customerInformationTop = 200
 
     doc.fontSize(10)
         .text("Invoice Number:", 50, customerInformationTop)
@@ -71,14 +78,14 @@ function generateCustomerInformation(doc, invoice) {
             customerInformationTop + 30
         )
 
-    generateHr(doc, 252);
+    generateHr(doc, 252)
 }
 
 function generateInvoiceTable(doc, invoice) {
     let i;
-    const invoiceTableTop = 330;
+    const invoiceTableTop = 330
 
-    doc.font("Roboto-Bold");
+    doc.font("Roboto-Bold")
     generateTableRow(
         doc,
         invoiceTableTop,
@@ -88,14 +95,14 @@ function generateInvoiceTable(doc, invoice) {
         "Quantity",
         "Sub Total"
     );
-    generateHr(doc, invoiceTableTop + 20);
-    doc.font("Roboto");
+    generateHr(doc, invoiceTableTop + 20)
+    doc.font("Roboto")
 
     let position = invoiceTableTop + 30;
     for (i = 0; i < invoice.items.length; i++) {
-        const item = invoice.items[i];
-        item.price = parseFloat(item.price);
-        item.totalItemValue = parseFloat(item.total_item_value);
+        const item = invoice.items[i]
+        item.price = parseFloat(item.price)
+        item.totalItemValue = parseFloat(item.total_item_value)
         generateItemRow(
             doc,
             position,
@@ -108,14 +115,14 @@ function generateInvoiceTable(doc, invoice) {
             formatCurrency(parseFloat(item.tax_b)),
             formatCurrency(parseFloat(item.tax_c)),
             formatCurrency(parseFloat(item.total_item_value))
-        );
+        )
 
-        generateHr(doc, position + 70);
-        position += 85;
+        generateHr(doc, position + 70)
+        position += 85
     }
 
     const grandTotalPosition = position;
-    doc.font("Roboto-Bold");
+    doc.font("Roboto-Bold")
     generateTableRow(
         doc,
         grandTotalPosition,
@@ -125,7 +132,7 @@ function generateInvoiceTable(doc, invoice) {
         "",
         formatCurrency(invoice.subtotal)
     );
-    doc.font("Roboto");
+    doc.font("Roboto")
 }
 
 function generateItemRow(
@@ -155,11 +162,11 @@ function generateItemRow(
         .text("Tax C:", 370, y + 36, { width: 90, align: "right" })
         .text(tax_c, 0, y + 36, { align: "right" })
 
-    doc.font("Roboto-Bold");
+    doc.font("Roboto-Bold")
     doc.fontSize(10)
         .text("Item Total: ", 370, y + 55, { width: 90, align: "right" })
-        .text(totalItemValue, 0, y + 55, { align: "right" });
-    doc.font("Roboto");
+        .text(totalItemValue, 0, y + 55, { align: "right" })
+    doc.font("Roboto")
 }
 
 function generateFooter(doc) {
@@ -168,7 +175,7 @@ function generateFooter(doc) {
         50,
         780,
         { align: "center", width: 500 }
-    );
+    )
 }
 
 function generateTableRow(
@@ -185,7 +192,7 @@ function generateTableRow(
         .text(description, 200, y)
         .text(unitCost, 280, y, { width: 90, align: "right" })
         .text(quantity, 370, y, { width: 90, align: "right" })
-        .text(lineTotal, 0, y, { align: "right" });
+        .text(lineTotal, 0, y, { align: "right" })
 }
 
 function generateHr(doc, y) {
@@ -193,21 +200,21 @@ function generateHr(doc, y) {
         .lineWidth(1)
         .moveTo(50, y)
         .lineTo(550, y)
-        .stroke();
+        .stroke()
 }
 
 function formatCurrency(rupees) {
-    return "₹" + rupees.toFixed(2);
+    return "₹" + rupees.toFixed(2)
 }
 
 function formatDate(date) {
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
+    const day = date.getDate()
+    const month = date.getMonth() + 1
+    const year = date.getFullYear()
 
-    return year + "/" + month + "/" + day;
+    return year + "/" + month + "/" + day
 }
 
 module.exports = {
     createInvoice,
-};
+}
