@@ -5,6 +5,10 @@ const tokenCheck = require('../api/middlewares/tokenCheck')
 const authorizeAdmin = require('../api/middlewares/authorizeAdmin')
 const cartRoute = require('../api/routes/cart')
 const ordersRoute = require('../api/routes/orders')
+const uploadImage = require('../api/services/uploadHelper')
+
+jest.mock('fs', () => jest.createMockFromModule('fs'))
+const fs = require('fs')
 
 jest.mock('pg', () => {
     const mPool = {
@@ -14,6 +18,16 @@ jest.mock('pg', () => {
     };
     return { Pool: jest.fn(() => mPool) };
   })
+
+jest.mock('../api/services/uploadHelper', (filePath, fileName) => jest.fn(() => { return Promise.resolve('mocked-image-url')}));
+
+jest.mock('../api/services/createInvoice', () => ({
+    createInvoice: jest.fn((invoice, outputPath) => {
+      return Promise.resolve(true)
+    }),
+}))
+
+fs.unlinkSync = jest.fn()
 
 jest.mock('../api/middlewares/tokenCheck', () => jest.fn((req, res, next) => next()));
 jest.mock('../api/middlewares/authorizeAdmin', () => jest.fn((req, res, next) => next()));
@@ -268,16 +282,18 @@ describe('Integration Tests for Orders and Billings API', () => {
 
             const{body, statusCode} = await request(app).get('/cart/placeOrder')
             .set('Authorization', 'Bearer valid-access-token')
-
+            
             expect(tokenCheck).toHaveBeenCalled()
+            expect(uploadImage).toHaveBeenCalled()
             expect(mockConnect).toHaveBeenCalled()
-            expect(mockClient.query).toHaveBeenCalledTimes(10)
+            expect(mockClient.query).toHaveBeenCalledTimes(12)
             
             expect(statusCode).toBe(200)
             expect(body).toEqual({
                 message: "Ordered Placed Successfully",
                 data: expect.any(Number),
-                orderId: expect.any(String)
+                orderId: expect.any(String),
+                invoice_link: expect.any(String)
             })
             
         })
@@ -421,7 +437,7 @@ describe('Integration Tests for Orders and Billings API', () => {
             
             expect(statusCode).toBe(200)
             expect(body).toEqual({
-                message: "Orders Fetched Successfully",
+                message: "Bill Fetched Successfully",
                 data: expect.arrayContaining([
                     expect.objectContaining({
                         item_id: expect.any(String),

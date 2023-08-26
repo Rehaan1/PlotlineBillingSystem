@@ -162,4 +162,4 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 
 - [X] Unit Tests
 
-- [ ] Bill Invoice
+- [X] Bill Invoice
