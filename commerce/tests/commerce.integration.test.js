@@ -2,7 +2,6 @@ const express = require('express')
 const request = require('supertest')
 const itemsRoute = require('../api/routes/items')
 const { Pool } = require('pg')
-const jwt = require('jsonwebtoken')
 const tokenCheck = require('../api/middlewares/tokenCheck')
 const authorizeAdmin = require('../api/middlewares/authorizeAdmin')
 
@@ -14,12 +13,6 @@ jest.mock('pg', () => {
     };
     return { Pool: jest.fn(() => mPool) };
   })
-
-jest.mock('jsonwebtoken', () => ({
-    sign: jest.fn(),
-    genSaltSync: jest.fn(),
-    hashSync: jest.fn()
-  }))
 
 jest.mock('../api/middlewares/tokenCheck', () => jest.fn((req, res, next) => next()));
 jest.mock('../api/middlewares/authorizeAdmin', () => jest.fn((req, res, next) => next()));
