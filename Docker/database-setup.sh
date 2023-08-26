@@ -144,3 +144,14 @@ psql -h $HOST -p $PORT -U $USERNAME -d $DB_NAME -c "CREATE TABLE IF NOT EXISTS o
 # Create the 'user_id index on order_user_rel' table
 psql -h $HOST -p $PORT -U $USERNAME -d $DB_NAME -c "CREATE INDEX idx_order_user_rel_user_id ON order_user_rel(user_id);"
 
+# Create the 'invoices' table
+psql -h $HOST -p $PORT -U $USERNAME -d $DB_NAME -c "CREATE TABLE IF NOT EXISTS invoices (
+    invoice_id UUID DEFAULT uuid_generate_v4()
+    bill_id UUID,
+    invoice_link TEXT,
+    PRIMARY KEY (invoice_id),
+    FOREIGN KEY (bill_id) REFERENCES bill(bill_id)
+);"
+
+# Create the 'bill_id index on invoices' table
+psql -h $HOST -p $PORT -U $USERNAME -d $DB_NAME -c "CREATE INDEX idx_bill_id_invoices ON invoices(bill_id);"

@@ -23,6 +23,8 @@
 - POSTGRES_HOST
 - JWT_SECRET
 - JWT_EXPIRY
+- PROJECT_ID (GCP Project ID for storing invoice)
+- BUCKET_NAME (GCP Bucket Name for storing invoice)
 
 4. Run 
 
@@ -42,6 +44,10 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 
 8. *Note*: To run unit tests, go to the folder of the microservice (eg. auth folder) and type ``` npm run test ```
 
+## Invoice SneekPeek :eyes:
+![invoice](https://github.com/Rehaan1/PlotlineBillingSystem/assets/38107493/26f91c62-914b-44ac-9cb0-1f6bc19a036e)
+
+
 ## Architecture Diagram
 
 ##### System Architecture Diagram:
@@ -51,7 +57,8 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 ##### Database Design
 - **Note**: Items table was *Horizontal Partitioned* for faster indexed search in case of millions of rows by list on item_type to two new tables items_product and items_service
 
-![ERD](https://github.com/Rehaan1/PlotlineBillingSystem/assets/38107493/634949c3-319a-459b-8bbf-e9f86894995a)
+![Plotline](https://github.com/Rehaan1/PlotlineBillingSystem/assets/38107493/47681b5c-ee79-4691-a5c1-ee8ea9c8ed62)
+
 
 ##### Database Choice Reasons
 - Database chosen was Postgres due to its strong ACID Compliance and ability to run complex queries
@@ -154,3 +161,5 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 - [X] Show all Orders (Admin Only)
 
 - [X] Unit Tests
+
+- [X] Bill Invoice

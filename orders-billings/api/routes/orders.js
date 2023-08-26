@@ -108,24 +108,8 @@ router.post('/order', tokenCheck, (req,res) => {
                                 i.name,
                                 i.price,
                                 i.item_type,
-                                CASE
-                                    WHEN i.item_type = 'product' THEN pt.pa
-                                    WHEN i.item_type = 'service' THEN st.sa
-                                END AS tax_a,
-                                CASE
-                                    WHEN i.item_type = 'product' THEN pt.pb
-                                    WHEN i.item_type = 'service' THEN st.sb
-                                END AS tax_b,
-                                CASE
-                                    WHEN i.item_type = 'product' THEN pt.pc
-                                    WHEN i.item_type = 'service' THEN st.sc
-                                END AS tax_c,
-                                (i.price * io.quantity) + (io.quantity * (CASE
-                                    WHEN i.item_type = 'product' THEN pt.pa + pt.pb + pt.pc
-                                    WHEN i.item_type = 'service' THEN st.sa + st.sb + st.sc
-                                    ELSE 0
-                                END)) AS total_item_value,
-                                b.total_value AS total_order_value
+                                b.total_value AS total_order_value,
+                                inv.invoice_link
                             FROM
                                 orders o
                             JOIN
@@ -133,11 +117,9 @@ router.post('/order', tokenCheck, (req,res) => {
                             JOIN
                                 items i ON io.item_id = i.item_id
                             LEFT JOIN
-                                product_tax pt ON i.item_type = 'product' AND pt.item_id = i.item_id
-                            LEFT JOIN
-                                service_tax st ON i.item_type = 'service' AND st.item_id = i.item_id
-                            LEFT JOIN
                                 bill b ON o.bill_id = b.bill_id
+                            LEFT JOIN
+                                invoices inv ON o.bill_id = inv.bill_id
                             WHERE
                                 o.order_id = %L
                             `,
@@ -212,39 +194,17 @@ router.post('/bill', tokenCheck, (req,res) => {
                 
                 const query = format(
                     `SELECT
-                        io.item_id,
-                        io.quantity,
-                        i.name,
-                        i.price,
-                        i.item_type,
-                        CASE
-                            WHEN i.item_type = 'product' THEN pt.pa
-                            WHEN i.item_type = 'service' THEN st.sa
-                        END AS tax_a,
-                        CASE
-                            WHEN i.item_type = 'product' THEN pt.pb
-                            WHEN i.item_type = 'service' THEN st.sb
-                        END AS tax_b,
-                        CASE
-                            WHEN i.item_type = 'product' THEN pt.pc
-                            WHEN i.item_type = 'service' THEN st.sc
-                        END AS tax_c,
-                        (i.price * io.quantity) + (io.quantity * (CASE
-                            WHEN i.item_type = 'product' THEN pt.pa + pt.pb + pt.pc
-                            WHEN i.item_type = 'service' THEN st.sa + st.sb + st.sc
-                            ELSE 0
-                        END)) AS total_item_value,
-                        b.total_value AS total_order_value
+                    io.quantity,
+                    i.name,
+                    inv.invoice_link
                     FROM
                         item_order_rel io
                     JOIN
                         items i ON io.item_id = i.item_id
                     LEFT JOIN
-                        product_tax pt ON i.item_type = 'product' AND pt.item_id = i.item_id
-                    LEFT JOIN
-                        service_tax st ON i.item_type = 'service' AND st.item_id = i.item_id
-                    LEFT JOIN
                         bill b ON io.item_rel_id = b.item_rel_id
+                    LEFT JOIN
+                        invoices inv ON b.bill_id = inv.bill_id
                     WHERE
                         b.bill_id = %L;
                     `,
@@ -257,7 +217,7 @@ router.post('/bill', tokenCheck, (req,res) => {
                         client.release()
 
                         return res.status(200).json({
-                            message: "Orders Fetched Successfully",
+                            message: "Bill Fetched Successfully",
                             data: result.rows
                         })
                     })
@@ -362,29 +322,13 @@ router.post('/admin-order-details', tokenCheck, authorizeAdmin, (req,res) => {
                 
                 const query = format(
                     `SELECT
-                        io.item_id,
-                        io.quantity,
-                        i.name,
-                        i.price,
-                        i.item_type,
-                        CASE
-                            WHEN i.item_type = 'product' THEN pt.pa
-                            WHEN i.item_type = 'service' THEN st.sa
-                        END AS tax_a,
-                        CASE
-                            WHEN i.item_type = 'product' THEN pt.pb
-                            WHEN i.item_type = 'service' THEN st.sb
-                        END AS tax_b,
-                        CASE
-                            WHEN i.item_type = 'product' THEN pt.pc
-                            WHEN i.item_type = 'service' THEN st.sc
-                        END AS tax_c,
-                        (i.price * io.quantity) + (io.quantity * (CASE
-                            WHEN i.item_type = 'product' THEN pt.pa + pt.pb + pt.pc
-                            WHEN i.item_type = 'service' THEN st.sa + st.sb + st.sc
-                            ELSE 0
-                        END)) AS total_item_value,
-                        b.total_value AS total_order_value
+                    io.item_id,
+                    io.quantity,
+                    i.name,
+                    i.price,
+                    i.item_type,
+                    b.total_value AS total_order_value,
+                    inv.invoice_link
                     FROM
                         orders o
                     JOIN
@@ -392,11 +336,9 @@ router.post('/admin-order-details', tokenCheck, authorizeAdmin, (req,res) => {
                     JOIN
                         items i ON io.item_id = i.item_id
                     LEFT JOIN
-                        product_tax pt ON i.item_type = 'product' AND pt.item_id = i.item_id
-                    LEFT JOIN
-                        service_tax st ON i.item_type = 'service' AND st.item_id = i.item_id
-                    LEFT JOIN
                         bill b ON o.bill_id = b.bill_id
+                    LEFT JOIN
+                        invoices inv ON o.bill_id = inv.bill_id
                     WHERE
                         o.order_id = %L
                     `,
