@@ -284,4 +284,255 @@ describe('Integration Tests for Orders and Billings API', () => {
 
     })
 
+    describe('Order Test', ()=>{
+        let dbUserPool
+        
+        beforeEach(()=>{
+            dbUserPool = new Pool()
+        })
+
+        afterEach(()=>{
+            jest.clearAllMocks()
+        })
+
+
+        it('GET /orders/ - success - get orders', async ()=>{
+
+            const mockClient = {
+                query: jest.fn().mockResolvedValue({ rows: [{order_id:"mock-order-id", user_id:"mock-user-id"}], rowCount: 1 }),
+                release: jest.fn(),
+            }
+
+            const mockConnect = jest.fn().mockResolvedValue(mockClient)
+
+            const dbUserPool = new Pool()
+            dbUserPool.connect = mockConnect
+
+
+            const{body, statusCode} = await request(app).get('/orders')
+            .set('Authorization', 'Bearer valid-access-token')
+
+            expect(tokenCheck).toHaveBeenCalled()
+            expect(mockConnect).toHaveBeenCalled()
+            expect(mockClient.query).toHaveBeenCalledTimes(3)
+            
+            expect(statusCode).toBe(200)
+            expect(body).toEqual({
+                message: "Orders Fetched Successfully",
+                data: expect.arrayContaining([
+                    expect.objectContaining({
+                        order_id: expect.any(String),
+                        user_id: expect.any(String),
+                    })
+                ])
+            })
+            
+        })
+
+        it('POST /orders/order - success - get order details', async ()=>{
+
+            const mockClient = {
+                query: jest.fn().mockResolvedValue({ rows: [{
+                    item_id:"mock",
+                    quantity: "mock",
+                    name: "mock",
+                    price: "mock",
+                    item_type: "mock",
+                    tax_a: "mock",
+                    tax_b: "mock",
+                    tax_c: "mock",
+                    total_item_value: "mock",
+                    total_order_value: "mock"
+                }], rowCount: 1 }),
+                release: jest.fn(),
+            }
+
+            const mockConnect = jest.fn().mockResolvedValue(mockClient)
+
+            const dbUserPool = new Pool()
+            dbUserPool.connect = mockConnect
+
+
+            const{body, statusCode} = await request(app).post('/orders/order')
+            .set('Authorization', 'Bearer valid-access-token')
+            .send({
+                orderId: "mock-item-id",
+            })
+
+            expect(tokenCheck).toHaveBeenCalled()
+            expect(mockConnect).toHaveBeenCalled()
+            expect(mockClient.query).toHaveBeenCalledTimes(4)
+            
+            expect(statusCode).toBe(200)
+            expect(body).toEqual({
+                message: "Orders Fetched Successfully",
+                data: expect.arrayContaining([
+                    expect.objectContaining({
+                        item_id: expect.any(String),
+                        quantity: expect.any(String),
+                        name: expect.any(String),
+                        price: expect.any(String),
+                        item_type: expect.any(String),
+                        tax_a: expect.any(String),
+                        tax_b: expect.any(String),
+                        tax_c: expect.any(String),
+                        total_item_value: expect.any(String),
+                        total_order_value: expect.any(String)
+                    })
+                ])
+            })
+            
+        })
+
+
+        it('POST /orders/bill - success - get bill details', async ()=>{
+
+            const mockClient = {
+                query: jest.fn().mockResolvedValue({ rows: [{
+                    item_id:"mock",
+                    quantity: "mock",
+                    name: "mock",
+                    price: "mock",
+                    item_type: "mock",
+                    tax_a: "mock",
+                    tax_b: "mock",
+                    tax_c: "mock",
+                    total_item_value: "mock",
+                    total_order_value: "mock"
+                }], rowCount: 1 }),
+                release: jest.fn(),
+            }
+
+            const mockConnect = jest.fn().mockResolvedValue(mockClient)
+
+            const dbUserPool = new Pool()
+            dbUserPool.connect = mockConnect
+
+
+            const{body, statusCode} = await request(app).post('/orders/bill')
+            .set('Authorization', 'Bearer valid-access-token')
+            .send({
+                billId: "mock-item-id",
+            })
+
+            expect(tokenCheck).toHaveBeenCalled()
+            expect(mockConnect).toHaveBeenCalled()
+            expect(mockClient.query).toHaveBeenCalledTimes(3)
+            
+            expect(statusCode).toBe(200)
+            expect(body).toEqual({
+                message: "Orders Fetched Successfully",
+                data: expect.arrayContaining([
+                    expect.objectContaining({
+                        item_id: expect.any(String),
+                        quantity: expect.any(String),
+                        name: expect.any(String),
+                        price: expect.any(String),
+                        item_type: expect.any(String),
+                        tax_a: expect.any(String),
+                        tax_b: expect.any(String),
+                        tax_c: expect.any(String),
+                        total_item_value: expect.any(String),
+                        total_order_value: expect.any(String)
+                    })
+                ])
+            })
+            
+        })
+
+        it('GET /orders/admin-get-order - success - get all orders', async ()=>{
+
+            const mockClient = {
+                query: jest.fn().mockResolvedValue({ rows: [{order_id:"mock-order-id", user_id:"mock-user-id", bill_id:"mock-bill-id"}], rowCount: 1 }),
+                release: jest.fn(),
+            }
+
+            const mockConnect = jest.fn().mockResolvedValue(mockClient)
+
+            const dbUserPool = new Pool()
+            dbUserPool.connect = mockConnect
+
+
+            const{body, statusCode} = await request(app).get('/orders/admin-get-orders')
+            .set('Authorization', 'Bearer valid-access-token')
+
+            expect(tokenCheck).toHaveBeenCalled()
+            expect(authorizeAdmin).toHaveBeenCalled()
+            expect(mockConnect).toHaveBeenCalled()
+            expect(mockClient.query).toHaveBeenCalledTimes(3)
+            
+            expect(statusCode).toBe(200)
+            expect(body).toEqual({
+                message: "Orders Fetched Successfully",
+                data: expect.arrayContaining([
+                    expect.objectContaining({
+                        order_id: expect.any(String),
+                        user_id: expect.any(String),
+                        bill_id: expect.any(String)
+                    })
+                ])
+            })
+            
+        })
+
+
+        it('POST /orders/admin-order-details - success - get order details', async ()=>{
+
+            const mockClient = {
+                query: jest.fn().mockResolvedValue({ rows: [{
+                    item_id:"mock",
+                    quantity: "mock",
+                    name: "mock",
+                    price: "mock",
+                    item_type: "mock",
+                    tax_a: "mock",
+                    tax_b: "mock",
+                    tax_c: "mock",
+                    total_item_value: "mock",
+                    total_order_value: "mock"
+                }], rowCount: 1 }),
+                release: jest.fn(),
+            }
+
+            const mockConnect = jest.fn().mockResolvedValue(mockClient)
+
+            const dbUserPool = new Pool()
+            dbUserPool.connect = mockConnect
+
+
+            const{body, statusCode} = await request(app).post('/orders/admin-order-details')
+            .set('Authorization', 'Bearer valid-access-token')
+            .send({
+                orderId: "mock-item-id",
+            })
+
+            expect(tokenCheck).toHaveBeenCalled()
+            expect(authorizeAdmin).toHaveBeenCalled()
+            expect(mockConnect).toHaveBeenCalled()
+            expect(mockClient.query).toHaveBeenCalledTimes(3)
+            
+            expect(statusCode).toBe(200)
+            expect(body).toEqual({
+                message: "Orders Fetched Successfully",
+                data: expect.arrayContaining([
+                    expect.objectContaining({
+                        item_id: expect.any(String),
+                        quantity: expect.any(String),
+                        name: expect.any(String),
+                        price: expect.any(String),
+                        item_type: expect.any(String),
+                        tax_a: expect.any(String),
+                        tax_b: expect.any(String),
+                        tax_c: expect.any(String),
+                        total_item_value: expect.any(String),
+                        total_order_value: expect.any(String)
+                    })
+                ])
+            })
+            
+        })
+
+
+    })
+
 })
