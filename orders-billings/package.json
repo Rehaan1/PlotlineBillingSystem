@@ -4,7 +4,7 @@
   "description": "orders and billing endpoint for plotline billing system",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --watchAll"
   },
   "author": "Rehaan Mazid",
   "license": "ISC",
@@ -18,5 +18,9 @@
     "pg": "^8.11.3",
     "pg-format": "^1.0.4",
     "uuidv4": "^6.2.13"
+  },
+  "devDependencies": {
+    "jest": "^29.6.4",
+    "supertest": "^6.3.3"
   }
 }

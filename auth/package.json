@@ -4,7 +4,7 @@
   "description": "authentication microservice for plotline billing system",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --watchAll"
   },
   "author": "Rehaan Mazid",
   "license": "ISC",
@@ -17,5 +17,9 @@
     "nodemon": "^3.0.1",
     "pg": "^8.11.3",
     "pg-format": "^1.0.4"
+  },
+  "devDependencies": {
+    "jest": "^29.6.4",
+    "supertest": "^6.3.3"
   }
 }

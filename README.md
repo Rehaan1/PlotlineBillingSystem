@@ -40,6 +40,8 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 
 7. Voila! :fireworks: All's Setup
 
+8. *Note*: To run unit tests, go to the folder of the microservice (eg. auth folder) and type ``` npm run test ```
+
 ## Architecture Diagram
 
 ##### System Architecture Diagram:
@@ -109,6 +111,8 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 
 - [X] Allow setting user role to Admin (Admin Only)
 
+- [X] Unit Tests
+
 
 #### Commerce Endpoints :handbag:
 
@@ -126,6 +130,7 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 
 - [X] Delete Product/Service (Admin Only)
 
+- [X] Unit Tests
 
 
 #### Orders & Billing Endpoints :credit_card:
@@ -147,3 +152,5 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 - [X] Get Bill for Order
 
 - [X] Show all Orders (Admin Only)
+
+- [X] Unit Tests
