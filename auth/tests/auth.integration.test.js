@@ -225,6 +225,16 @@ describe('Integration Tests for Auth API', ()=>{
 
     describe('Admin Endpoint Test', () => {
 
+        let dbUserPool
+        
+        beforeEach(()=>{
+            dbUserPool = new Pool()
+        })
+
+        afterEach(()=>{
+            jest.clearAllMocks()
+        })
+
         it('PATCH /auth/role/update - success - role updated', async () => {
             
             const mockClient = {
@@ -287,6 +297,16 @@ describe('Integration Tests for Auth API', ()=>{
     })
 
     describe('User Endpoint Test', () =>{
+
+        let dbUserPool
+        
+        beforeEach(()=>{
+            dbUserPool = new Pool()
+        })
+
+        afterEach(()=>{
+            jest.clearAllMocks()
+        })
 
         it('GET /user - success - get user data', async () => {
             
