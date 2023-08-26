@@ -40,6 +40,8 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 
 7. Voila! :fireworks: All's Setup
 
+8. *Note*: To run unit tests, go to the folder of the microservice (eg. auth folder) and type ``` npm run test ```
+
 ## Architecture Diagram
 
 ##### System Architecture Diagram:
@@ -151,4 +153,4 @@ If unable to execute, give necessary executable permission. eg. ``` chmod +x dat
 
 - [X] Show all Orders (Admin Only)
 
-- [ ] Unit Tests
+- [X] Unit Tests
