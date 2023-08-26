@@ -146,7 +146,7 @@ psql -h $HOST -p $PORT -U $USERNAME -d $DB_NAME -c "CREATE INDEX idx_order_user_
 
 # Create the 'invoices' table
 psql -h $HOST -p $PORT -U $USERNAME -d $DB_NAME -c "CREATE TABLE IF NOT EXISTS invoices (
-    invoice_id UUID DEFAULT uuid_generate_v4()
+    invoice_id UUID DEFAULT uuid_generate_v4(),
     bill_id UUID,
     invoice_link TEXT,
     PRIMARY KEY (invoice_id),
