@@ -9,6 +9,7 @@ const { dbUserPool } = require('../db/db')
 const tokenCheck = require('../middlewares/tokenCheck')
 const { uuid } = require('uuidv4')
 const { createInvoice } = require("../services/createInvoice")
+const uploadImage = require('../services/uploadHelper')
 
 router.post('/add',tokenCheck, (req,res) => {
 
@@ -576,14 +577,17 @@ router.get('/placeOrder',tokenCheck, (req, res) => {
                                                                                         }
                                                                                         
                                                                                         const invoiceFileName = invoice_number+".pdf"
-                                                                                        const outputPath = path.join(__dirname, '..', '..', 'invoices', invoiceFileName);
+                                                                                        const outputPath = path.join(__dirname, '..', '..', 'invoices', invoiceFileName)
+
 
                                                                                         if(await createInvoice(invoice, outputPath))
                                                                                         {
+                                                                                            const imageUrl = await uploadImage(outputPath, invoiceFileName)
+                                                                                            
                                                                                             const query = format(
                                                                                                 "INSERT INTO invoices (bill_id, invoice_link) VALUES (%L::uuid, %L) RETURNING *",
                                                                                                 billId,
-                                                                                                outputPath
+                                                                                                imageUrl
                                                                                             )
 
                                                                                             client.query(query)
@@ -610,7 +614,8 @@ router.get('/placeOrder',tokenCheck, (req, res) => {
                                                                                                                 message: "Ordered Placed Successfully",
                                                                                                                 data: result.rowCount,
                                                                                                                 orderId: orderId,
-                                                                                                                billId: billId
+                                                                                                                billId: billId,
+                                                                                                                invoice_link: imageUrl
                                                                                                             })
 
                                                                                                         })
