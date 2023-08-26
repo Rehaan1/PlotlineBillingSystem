@@ -583,7 +583,7 @@ router.get('/placeOrder',tokenCheck, (req, res) => {
                                                                                         if(await createInvoice(invoice, outputPath))
                                                                                         {
                                                                                             const imageUrl = await uploadImage(outputPath, invoiceFileName)
-                                                                                            
+
                                                                                             const query = format(
                                                                                                 "INSERT INTO invoices (bill_id, invoice_link) VALUES (%L::uuid, %L) RETURNING *",
                                                                                                 billId,
@@ -592,6 +592,17 @@ router.get('/placeOrder',tokenCheck, (req, res) => {
 
                                                                                             client.query(query)
                                                                                                 .then(result => {
+
+                                                                                                    // Delete file from server
+                                                                                                    try 
+                                                                                                    {
+                                                                                                        fs.unlinkSync(outputPath);
+                                                                                                        console.log(`File ${outputPath} has been deleted synchronously.`);
+                                                                                                    } 
+                                                                                                    catch (err) 
+                                                                                                    {
+                                                                                                        console.error(`Error deleting ${outputPath}:`, err);
+                                                                                                    }
 
                                                                                                     const query = format(
                                                                                                         "DELETE FROM cart WHERE user_id = %L RETURNING *",
