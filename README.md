@@ -8,7 +8,7 @@
 
 ## Backend Documentation For the Amigos :cowboy_hat_face:: https://documenter.getpostman.com/view/14038453/2s9Y5TzQF4
 
-## Deployed Link (Deployed on GCP :cloud: Compute Instance) : [http://35.196.188.168/](http://34.73.112.44/)
+## Deployed Link (Deployed on GCP :cloud: Compute Instance) : [http://34.73.112.44/](http://34.73.112.44/)
 
 ## Steps to Start System in Local Machine :computer:
 1. Go to Docker Folder
